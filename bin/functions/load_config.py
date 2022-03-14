@@ -420,6 +420,7 @@ def probe_sleep_job_jar():
 
 
 def probe_hadoop_configure_dir():
+    join = os.path.join
     # probe hadoop configuration files
     if not HibenchConf.get("hibench.hadoop.configure.dir", ""):
         # For Apache, HDP, and CDH release
@@ -624,6 +625,10 @@ def export_config(workload_name, framework_name):
     spark_prop_conf_filename = join(spark_conf_dir, "spark.conf")
     sparkbench_prop_conf_filename = join(spark_conf_dir, "sparkbench.conf")
 
+    spark_home = HibenchConf.get("hibench.spark.home", "")
+    assert spark_home, "`hibench.spark.home` undefined, please fix it and retry"
+    spark_default_conf_filename = join(spark_home, 'conf/spark-defaults.conf')
+
     if not os.path.exists(spark_conf_dir):
         os.makedirs(spark_conf_dir)
     if not os.path.exists(conf_dir):
@@ -655,6 +660,13 @@ def export_config(workload_name, framework_name):
         sources[source].append('%s\t%s' % (prop_name, prop_value))
     # generate configure for sparkbench
     with open(spark_prop_conf_filename, 'w') as f:
+        # add spark default conf
+        with open(spark_default_conf_filename, 'r') as f_def:
+            f.write("# Source: %s\n" % spark_default_conf_filename)
+            for line in f_def:
+                f.write(line)
+            f.write("\n\n")
+
         for source in sorted(sources.keys()):
             items = [x for x in sources[source] if x.startswith("spark.")]
             if items:
