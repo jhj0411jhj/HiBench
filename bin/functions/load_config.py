@@ -664,6 +664,8 @@ def export_config(workload_name, framework_name):
         with open(spark_default_conf_filename, 'r') as f_def:
             f.write("# Source: %s\n" % spark_default_conf_filename)
             for line in f_def:
+                if line.startswith('spark.eventLog.compress'):
+                    line = 'spark.eventLog.compress false\n'
                 f.write(line)
             f.write("\n\n")
 
