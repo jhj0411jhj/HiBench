@@ -83,6 +83,15 @@ function gen_report() {		# dump the result to report file
     local start=$1
     local end=$2
     local size=$3
+
+    echo -e "[SparkTuning] Get task size: ${HIBENCH_CUR_WORKLOAD_NAME} $size"
+}
+
+function gen_report_bak() {		# dump the result to report file
+    assert ${HIBENCH_CUR_WORKLOAD_NAME} "HIBENCH_CUR_WORKLOAD_NAME not specified."
+    local start=$1
+    local end=$2
+    local size=$3
     which bc > /dev/null 2>&1
     if [ $? -eq 1 ]; then
 	assert 0 "\"bc\" utility missing. Please install it to generate proper report."
@@ -213,7 +222,53 @@ function run_spark_job() {
            YARN_OPTS="${YARN_OPTS} --driver-memory ${SPARK_YARN_DRIVER_MEMORY}"
        fi
     fi
-    if [[ "$CLS" == *.py ]]; then 
+#    if [[ "$CLS" == *.py ]]; then
+#        LIB_JARS="$LIB_JARS --jars ${SPARKBENCH_JAR}"
+#        SUBMIT_CMD="${SPARK_HOME}/bin/spark-submit ${LIB_JARS} --properties-file ${SPARK_PROP_CONF} --master ${SPARK_MASTER} ${YARN_OPTS} ${CLS} $@"
+#    else
+#        SUBMIT_CMD="${SPARK_HOME}/bin/spark-submit ${LIB_JARS} --properties-file ${SPARK_PROP_CONF} --class ${CLS} --master ${SPARK_MASTER} ${YARN_OPTS} ${SPARKBENCH_JAR} $@"
+#    fi
+    if [[ "$CLS" == *.py ]]; then
+        LIB_JARS="$LIB_JARS --jars ${SPARKBENCH_JAR}"
+        SUBMIT_CMD="${SPARK_HOME}/bin/spark-submit ${LIB_JARS} --master ${SPARK_MASTER} ${CLS} $@"
+    else
+        SUBMIT_CMD="${SPARK_HOME}/bin/spark-submit ${LIB_JARS} --class ${CLS} --master ${SPARK_MASTER} ${SPARKBENCH_JAR} $@"
+    fi
+    echo -e "[SparkTuning] Spark job command: ${SUBMIT_CMD}"
+}
+
+function run_spark_job_bak() {
+    LIB_JARS=
+    while (($#)); do
+      if [ "$1" = "--jars" ]; then
+        LIB_JARS="--jars $2"
+        shift 2
+        continue
+      fi
+      break
+    done
+
+    CLS=$1
+    shift
+
+    export_withlog SPARKBENCH_PROPERTIES_FILES
+
+    YARN_OPTS=""
+    if [[ "$SPARK_MASTER" == yarn-* ]] || [[ "$SPARK_MASTER" == yarn ]]; then
+        export_withlog HADOOP_CONF_DIR
+
+        YARN_OPTS="--num-executors ${YARN_NUM_EXECUTORS}"
+        if [[ -n "${YARN_EXECUTOR_CORES:-}" ]]; then
+            YARN_OPTS="${YARN_OPTS} --executor-cores ${YARN_EXECUTOR_CORES}"
+       fi
+       if [[ -n "${SPARK_YARN_EXECUTOR_MEMORY:-}" ]]; then
+           YARN_OPTS="${YARN_OPTS} --executor-memory ${SPARK_YARN_EXECUTOR_MEMORY}"
+       fi
+       if [[ -n "${SPAKR_YARN_DRIVER_MEMORY:-}" ]]; then
+           YARN_OPTS="${YARN_OPTS} --driver-memory ${SPARK_YARN_DRIVER_MEMORY}"
+       fi
+    fi
+    if [[ "$CLS" == *.py ]]; then
         LIB_JARS="$LIB_JARS --jars ${SPARKBENCH_JAR}"
         SUBMIT_CMD="${SPARK_HOME}/bin/spark-submit ${LIB_JARS} --properties-file ${SPARK_PROP_CONF} --master ${SPARK_MASTER} ${YARN_OPTS} ${CLS} $@"
     else
