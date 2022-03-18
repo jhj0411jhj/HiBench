@@ -307,7 +307,7 @@ function run_flink_job(){
 }
 
 function run_hadoop_job(){
-    ENABLE_MONITOR=1
+    ENABLE_MONITOR=0
     if [ "$1" = "--without-monitor" ]; then
         ENABLE_MONITOR=0
         shift 1
