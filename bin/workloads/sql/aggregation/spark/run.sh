@@ -29,7 +29,7 @@ prepare_sql_aggregation ${HIVEBENCH_SQL_FILE}
 
 START_TIME=`timestamp`
 rmr_hdfs $OUTPUT_HDFS
-run_spark_job com.intel.hibench.sparkbench.sql.ScalaSparkSQLBench ScalaAggregation ${HIVEBENCH_SQL_FILE}
+pseudo_run_spark_job com.intel.hibench.sparkbench.sql.ScalaSparkSQLBench ScalaAggregation ${HIVEBENCH_SQL_FILE}
 END_TIME=`timestamp`
 
 sleep 5

@@ -26,7 +26,7 @@ rmr_hdfs $OUTPUT_HDFS || true
 
 SIZE=`dir_size $INPUT_HDFS`
 START_TIME=`timestamp`
-run_spark_job com.intel.hibench.sparkbench.ml.SummarizerExample ${INPUT_HDFS}
+pseudo_run_spark_job com.intel.hibench.sparkbench.ml.SummarizerExample ${INPUT_HDFS}
 END_TIME=`timestamp`
 
 gen_report ${START_TIME} ${END_TIME} ${SIZE}

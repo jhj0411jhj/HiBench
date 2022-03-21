@@ -191,7 +191,7 @@ function dir_size() {
     done
 }
 
-function run_spark_job() {
+function pseudo_run_spark_job() {
     LIB_JARS=
     while (($#)); do
       if [ "$1" = "--jars" ]; then
@@ -237,7 +237,7 @@ function run_spark_job() {
     echo -e "[SparkTuning] Spark job command: ${SUBMIT_CMD}"
 }
 
-function run_spark_job_bak() {
+function run_spark_job() {  # without monitor
     LIB_JARS=
     while (($#)); do
       if [ "$1" = "--jars" ]; then
@@ -275,10 +275,10 @@ function run_spark_job_bak() {
         SUBMIT_CMD="${SPARK_HOME}/bin/spark-submit ${LIB_JARS} --properties-file ${SPARK_PROP_CONF} --class ${CLS} --master ${SPARK_MASTER} ${YARN_OPTS} ${SPARKBENCH_JAR} $@"
     fi
     echo -e "${BGreen}Submit Spark job: ${Green}${SUBMIT_CMD}${Color_Off}"
-    MONITOR_PID=`start_monitor`
+    # MONITOR_PID=`start_monitor`
     execute_withlog ${SUBMIT_CMD}
     result=$?
-    stop_monitor ${MONITOR_PID}
+    # stop_monitor ${MONITOR_PID}
     if [ $result -ne 0 ]
     then
         echo -e "${BRed}ERROR${Color_Off}: Spark job ${BYellow}${CLS}${Color_Off} failed to run successfully."
@@ -307,7 +307,7 @@ function run_flink_job(){
 }
 
 function run_hadoop_job(){
-    ENABLE_MONITOR=0
+    ENABLE_MONITOR=0  # without monitor
     if [ "$1" = "--without-monitor" ]; then
         ENABLE_MONITOR=0
         shift 1
