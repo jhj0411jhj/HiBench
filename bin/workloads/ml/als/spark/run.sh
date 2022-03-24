@@ -33,7 +33,7 @@ OPTION="--rank $RANK_ALS \
         --numProductBlocks $PRODUCTBLOCKS_ALS \
         --numUserBlocks $USERBLOCKS_ALS \
         --lambda $LAMBDA_ALS"
-pseudo_run_spark_job com.intel.hibench.sparkbench.ml.ALSExample $OPTION $INPUT_HDFS
+run_spark_job com.intel.hibench.sparkbench.ml.ALSExample $OPTION $INPUT_HDFS
 END_TIME=`timestamp`
 
 gen_report ${START_TIME} ${END_TIME} ${SIZE}

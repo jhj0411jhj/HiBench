@@ -35,7 +35,7 @@ rmr_hdfs $OUTPUT_HDFS || true
 
 SIZE=`dir_size $INPUT_HDFS`
 START_TIME=`timestamp`
-pseudo_run_spark_job com.intel.hibench.sparkbench.micro.$CLASSNAME $FIRST_ARG $OUTPUT_HDFS $CACHE_IN_MEMORY $DISABLE_OUTPUT
+run_spark_job com.intel.hibench.sparkbench.micro.$CLASSNAME $FIRST_ARG $OUTPUT_HDFS $CACHE_IN_MEMORY $DISABLE_OUTPUT
 END_TIME=`timestamp`
 
 gen_report ${START_TIME} ${END_TIME} 0

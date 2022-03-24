@@ -25,7 +25,7 @@ show_bannar start
 
 START_TIME=`timestamp`
 printFullLog
-pseudo_run_spark_job com.intel.hibench.sparkbench.streaming.RunBench $SPARKBENCH_PROPERTIES_FILES
+run_spark_job com.intel.hibench.sparkbench.streaming.RunBench $SPARKBENCH_PROPERTIES_FILES
 END_TIME=`timestamp`
 
 gen_report ${START_TIME} ${END_TIME} 0

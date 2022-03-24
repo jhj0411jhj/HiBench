@@ -32,7 +32,7 @@ OPTION="--numTrees $NUM_TREES_RF \
         --impurity $IMPURITY_RF \
         --maxDepth $MAX_DEPTH_RF \
         --maxBins $MAX_BINS_RF"
-pseudo_run_spark_job com.intel.hibench.sparkbench.ml.RandomForestClassification $OPTION $INPUT_HDFS
+run_spark_job com.intel.hibench.sparkbench.ml.RandomForestClassification $OPTION $INPUT_HDFS
 END_TIME=`timestamp`
 
 gen_report ${START_TIME} ${END_TIME} ${SIZE}

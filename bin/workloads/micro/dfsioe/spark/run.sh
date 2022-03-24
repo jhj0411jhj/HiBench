@@ -27,7 +27,7 @@ rmr_hdfs $OUTPUT_HDFS || true
 
 SIZE=`dir_size $INPUT_HDFS`
 START_TIME=`timestamp`
-pseudo_run_spark_job com.intel.sparkbench.micro.ScalaDFSIOE $INPUT_HDFS $OUTPUT_HDFS $RD_NUM_OF_FILES $RD_FILE_SIZE $READ_ONLY
+run_spark_job com.intel.sparkbench.micro.ScalaDFSIOE $INPUT_HDFS $OUTPUT_HDFS $RD_NUM_OF_FILES $RD_FILE_SIZE $READ_ONLY
 END_TIME=`timestamp`
 
 gen_report ${START_TIME} ${END_TIME} ${SIZE}
