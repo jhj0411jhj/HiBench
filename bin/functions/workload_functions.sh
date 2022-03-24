@@ -62,12 +62,20 @@ function timestamp(){		# get current timestamp
 }
 
 function start_monitor(){
+    echo 'skip start_monitor!'
+}
+
+function stop_monitor(){
+    echo 'skip stop_monitor!'
+}
+
+function start_monitor_bak(){
     MONITOR_PID=`${workload_func_bin}/monitor.py ${HIBENCH_CUR_WORKLOAD_NAME} $$ ${WORKLOAD_RESULT_FOLDER}/monitor.log ${WORKLOAD_RESULT_FOLDER}/bench.log ${WORKLOAD_RESULT_FOLDER}/monitor.html ${SLAVES} &`
 #    echo "start monitor, got child pid:${MONITOR_PID}" > /dev/stderr
     echo ${MONITOR_PID}
 }
 
-function stop_monitor(){
+function stop_monitor_bak(){
     MONITOR_PID=$1
     assert $1 "monitor pid missing"
 #    echo "stop monitor, kill ${MONITOR_PID}" > /dev/stderr
