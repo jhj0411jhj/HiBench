@@ -317,7 +317,8 @@ function run_hadoop_job(){
     local job_name=$1
     shift
     local tail_arguments=$@
-    local CMD="${HADOOP_EXECUTABLE} --config ${HADOOP_CONF_DIR} jar $job_jar $job_name -Dyarn.resourcemanager.principal=gaiaadmin -fs hdfs://ss-teg-4-v2/ $tail_arguments"
+    # local CMD="${HADOOP_EXECUTABLE} --config ${HADOOP_CONF_DIR} jar $job_jar $job_name -Dyarn.resourcemanager.principal=gaiaadmin -fs hdfs://ss-teg-4-v2/ $tail_arguments"
+    local CMD="${HADOOP_EXECUTABLE} --config ${HADOOP_CONF_DIR} jar $job_jar $job_name $tail_arguments"
     echo -e "${BGreen}Submit MapReduce Job: ${Green}$CMD${Color_Off}"
     if [ ${ENABLE_MONITOR} = 1 ]; then
         MONITOR_PID=`start_monitor`
