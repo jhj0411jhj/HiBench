@@ -34,8 +34,10 @@ import scala.reflect.runtime.universe.TypeTag
 
 class IOCommon(val sc:SparkContext) {
    def load[T:ClassTag:TypeTag](filename:String, force_format:Option[String]=None) = {
-     val input_format = force_format.getOrElse(
-       IOCommon.getProperty("sparkbench.inputformat").getOrElse("Text"))
+     // This is modified for running on US using jar only. Please caution if input_format != "Sequence"
+     // val input_format = force_format.getOrElse(
+     //   IOCommon.getProperty("sparkbench.inputformat").getOrElse("Text"))
+     val input_format = "Sequence"
 
      input_format match {
        case "Text" =>
@@ -49,9 +51,12 @@ class IOCommon(val sc:SparkContext) {
    }
 
    def save(filename:String, data:RDD[_], prefix:String) = {
-     val output_format = IOCommon.getProperty(prefix).getOrElse("Text")
-     val output_format_codec =
-       loadClassByName[CompressionCodec](IOCommon.getProperty(prefix + ".codec"))
+     // This is modified for running on US using jar only. Please caution if input_format != "Sequence"
+     // val output_format = IOCommon.getProperty(prefix).getOrElse("Text")
+     // val output_format_codec =
+     //   loadClassByName[CompressionCodec](IOCommon.getProperty(prefix + ".codec"))
+     val output_format = "Sequence"
+     val output_format_codec = loadClassByName[CompressionCodec](None)
 
      output_format match {
        case "Text" =>
